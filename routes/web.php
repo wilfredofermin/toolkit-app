@@ -19,7 +19,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect('/admin');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin/login', function () {
+    return redirect('/login');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
