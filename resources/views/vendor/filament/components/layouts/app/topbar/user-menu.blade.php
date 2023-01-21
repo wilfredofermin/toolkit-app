@@ -102,7 +102,7 @@
         <x-filament::dropdown.list.item
             :color="$logoutItem?->getColor() ?? 'secondary'"
             :icon="$logoutItem?->getIcon() ?? 'heroicon-s-logout'"
-            :action="$logoutItem?->getUrl() ?? route('filament.auth.logout')"
+            :action="$logoutItem?->getUrl() ?? route('logout')"
             method="post"
             tag="form"
         >
