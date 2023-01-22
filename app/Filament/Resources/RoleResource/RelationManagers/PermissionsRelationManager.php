@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\AssociateAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
+use Spatie\Permission\Models\Permission;
 
 class PermissionsRelationManager extends RelationManager
 {
@@ -35,10 +36,12 @@ class PermissionsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->sortable()->searchable()
+                // ->description(fn (Permission $record): string => $record->name)
+                ,
                 TextColumn::make('guard_name'),
-                TextColumn::make('created_at'),
-                TextColumn::make('updated_at'),
+                TextColumn::make('created_at')->sortable(),
+                TextColumn::make('updated_at')->sortable(),
             ])
             ->filters([
                 //

@@ -10,6 +10,7 @@ use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +23,11 @@ class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-finger-print';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationGroup = 'Configuracion';
 
     public static function form(Form $form): Form
     {
@@ -36,7 +41,12 @@ class RoleResource extends Resource
                             ->maxLength(60)
                             ->unique()
                             ->required()
-                            ->autofocus()
+                            ->autofocus(),
+
+                            // Select::make('permissions')
+                            // ->multiple()
+                            // ->relationship('permissions', 'name')
+                            // ->preload(),
                     ])
 
             ]);
@@ -46,10 +56,10 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('guard_name'),
-                TextColumn::make('created_at'),
-                TextColumn::make('updated_at'),
+                TextColumn::make('created_at')->sortable(),
+                TextColumn::make('updated_at')->sortable(),
 
             ])
             ->filters([
@@ -57,6 +67,7 @@ class RoleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
 
             ->bulkActions([
