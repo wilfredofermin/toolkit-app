@@ -4,21 +4,28 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use LdapRecord\Laravel\Auth\HasLdapUser;
+use Filament\Models\Contracts\FilamentUser;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, AuthenticatesWithLdap, HasLdapUser;
+    use HasFactory, Notifiable, AuthenticatesWithLdap, HasLdapUser,HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+
+    protected $guard_name = 'web';
+
+
     protected $fillable = [
         'username',
         'cn',
@@ -68,4 +75,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function canAccessFilament(): bool
+    {
+
+        return $this->hasRole('Admin');
+    }
 }
