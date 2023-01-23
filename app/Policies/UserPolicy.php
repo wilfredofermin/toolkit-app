@@ -1,4 +1,5 @@
 <?php
+//Referencia -> https://github.com/drbyte/spatie-permissions-demo/blob/master/app/Policies/PostPolicy.php
 
 namespace App\Policies;
 
