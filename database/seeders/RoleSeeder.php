@@ -17,7 +17,14 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $user = User::where('username','wfermin')->first();
-        $user->assignRole(['Admin', 'Super-Admin']);
+        $user->assignRole(['Admin']);
+
+        $Admin = Role::create(['name' => 'Admin']);
+        $HelpDesk = Role::create(['name' => 'HelpDesk']);
+        $Developer = Role::create(['name' => 'Developer']);
+        $Employee = Role::create(['name' => 'Employee']);
+        $RRHH = Role::create(['name' => 'RRHH']);
+        $Service = Role::create(['name' => 'Service']);
         
     }
 }

@@ -3,14 +3,15 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Tables;
+use App\Models\Role;
 
+use Filament\Tables;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
-use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,7 +26,7 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-finger-print';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationGroup = 'Configuracion';
 
@@ -39,14 +40,14 @@ class RoleResource extends Resource
                         TextInput::make('name')
                             ->minLength(2)
                             ->maxLength(60)
-                            ->unique()
+                            ->unique(ignoreRecord: true)
                             ->required()
                             ->autofocus(),
 
-                            // Select::make('permissions')
-                            // ->multiple()
-                            // ->relationship('permissions', 'name')
-                            // ->preload(),
+                            Select::make('permissions')
+                            ->multiple()
+                            ->relationship('permissions', 'name')
+                            ->preload(),
                     ])
 
             ]);
@@ -58,7 +59,7 @@ class RoleResource extends Resource
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('guard_name'),
-                TextColumn::make('created_at')->sortable(),
+                TextColumn::make('created_at')->dateTime('d-m-Y')->sortable(),
                 TextColumn::make('updated_at')->sortable(),
 
             ])
@@ -66,13 +67,19 @@ class RoleResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ActionGroup::make([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                ])
             ])
+            
 
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+
             ]);
+
+
     }
 
     public static function getRelations(): array
